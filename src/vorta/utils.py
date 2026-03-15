@@ -52,7 +52,7 @@ class FilePathInfoAsync(QThread):
         self.signal.emit(self.path, str(self.size), str(self.files_count))
 
 
-def normalize_path(path):
+def normalize_path(path: str) -> str:
     """normalize paths for MacOS (but do nothing on other platforms)"""
     # HFS+ converts paths to a canonical form, so users shouldn't be required to enter an exact match.
     # Windows and Unix filesystems allow different forms, so users always have to enter an exact match.
@@ -62,7 +62,7 @@ def normalize_path(path):
 # prepare patterns as borg does
 # see `FnmatchPattern._prepare` at
 # https://github.com/borgbackup/borg/blob/master//src/borg/patterns.py
-def prepare_pattern(pattern):
+def prepare_pattern(pattern: str) -> re.Pattern:
     """Prepare and process fnmatch patterns as borg does"""
     if pattern.endswith(os.path.sep):
         # trailing sep indicates that the contents should be excluded
@@ -132,7 +132,7 @@ def get_directory_size(dir_path, exclude_patterns):
     return data_size_filtered, files_count_filtered
 
 
-def get_network_status_monitor():
+def get_network_status_monitor() -> NetworkStatusMonitor:
     global _network_status_monitor
     if _network_status_monitor is None:
         _network_status_monitor = NetworkStatusMonitor.get_network_status_monitor()
@@ -155,7 +155,7 @@ def get_path_datasize(path, exclude_patterns):
     return data_size, files_count
 
 
-def nested_dict():
+def nested_dict() -> dict:
     """
     Combination of two idioms to quickly build dicts from lists of keys:
 
@@ -296,7 +296,7 @@ def pretty_bytes(
         return "NaN"
 
 
-def get_asset(path):
+def get_asset(path: str) -> str:
     if getattr(sys, 'frozen', False):
         # we are running in a bundle
         bundle_dir = os.path.join(sys._MEIPASS, 'assets')
@@ -371,7 +371,7 @@ def parse_args():
     return parser.parse_known_args()[0]
 
 
-def slugify(value):
+def slugify(value: str) -> str:
     """
     Converts to lowercase, removes non-word characters (alphanumerics and
     underscores) and converts spaces to hyphens. Also strips leading and
@@ -384,7 +384,7 @@ def slugify(value):
     return re.sub(r'[-\s]+', '-', value)
 
 
-def uses_dark_mode():
+def uses_dark_mode() -> bool:
     """
     This function detects if we are running in dark mode (e.g. macOS dark mode).
     """
@@ -514,7 +514,7 @@ def get_mount_points(repo_url):
     return mount_points, repo_mounts
 
 
-def is_system_tray_available():
+def is_system_tray_available() -> bool:
     app = QApplication.instance()
     if app is None:
         app = QApplication([])
